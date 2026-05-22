@@ -1,0 +1,1418 @@
+<!DOCTYPE html>
+<html lang="ko" class="scroll-smooth"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>디자인바이도로시 | Gwangju Premium Interior Design Studio</title>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            deep: '#120721',       /* Midnight Deep Purple */
+                            dark: '#24113d',       /* Luxury Deep Royal Purple */
+                            primary: '#4d2d7f',    /* Amethyst Purple */
+                            accent: '#9368d4',     /* Soft Lavender */
+                            gold: '#D4AF37',       /* Pale Gold Accent */
+                            cream: '#FAF8F5',      /* Ivory / Cream Base */
+                            darkGray: '#1A1A1A',   /* Text Dark */
+                            lightGray: '#f0e6ff'   /* Soft Purple Slate */
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Playfair Display', 'Chosunilbo_myungjo', 'Georgia', 'serif'],
+                        sans: ['Pretendard', 'Noto Sans KR', 'Inter', 'sans-serif']
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Google Fonts for High-end Typography -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400..900;1,400..900&amp;family=Noto+Sans+KR:wght@300;400;500;700&amp;display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome Icons for Beautiful Social Links -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <!-- Premium Custom Styling -->
+    <style>
+        /* Modern Scrollbar styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF8F5;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #4d2d7f;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #24113d;
+        }
+
+        /* Glassmorphism Navigation */
+        .glass-nav {
+            background: rgba(250, 248, 245, 0.85);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        /* 3D Cylinder Carousel Container */
+        .stage-3d {
+            perspective: 1200px;
+            overflow: hidden;
+            width: 100%;
+            height: 480px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cylinder-3d {
+            position: relative;
+            width: 280px;
+            height: 380px;
+            transform-style: preserve-3d;
+            transition: transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1);
+            cursor: grab;
+        }
+
+        .cylinder-3d:active {
+            cursor: grabbing;
+        }
+
+        /* Carousel Slide items placed along a virtual circle */
+        .slide-3d {
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 280px;
+            height: 380px;
+            image-rendering: auto;
+            backface-visibility: visible;
+            border-radius: 16px;
+            overflow: hidden;
+            box-shadow: 0 15px 35px rgba(46, 26, 71, 0.2);
+            transition: transform 0.5s ease, opacity 0.5s ease, filter 0.5s ease;
+        }
+
+        /* Card Overlay Gradient */
+        .slide-3d::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(18, 7, 33, 0.85) 10%, transparent 60%);
+            z-index: 10;
+            pointer-events: none;
+        }
+
+        /* Prevent unwanted layout text selection while dragging */
+        .no-select {
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        /* Admin Active Styling */
+        .admin-mode-active .editable-text {
+            outline: 2px dashed #9368d4;
+            outline-offset: 4px;
+            cursor: text;
+        }
+        .admin-mode-active .editable-text:hover {
+            background-color: rgba(147, 104, 212, 0.1);
+        }
+
+        .admin-mode-active .editable-img-container {
+            position: relative;
+            cursor: pointer;
+        }
+        .admin-mode-active .editable-img-container::after {
+            content: '📸 이미지 변경하기';
+            position: absolute;
+            inset: 0;
+            background: rgba(18, 7, 33, 0.7);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 600;
+            border-radius: inherit;
+            opacity: 0;
+            transition: opacity 0.2s;
+            z-index: 30;
+        }
+        .admin-mode-active .editable-img-container:hover::after {
+            opacity: 1;
+        }
+
+        /* Drag handle & state */
+        .section-drag-handle {
+            display: none;
+        }
+        .admin-mode-active .section-drag-handle {
+            display: flex;
+        }
+        .draggable-section {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .draggable-section.drag-over {
+            border-top: 4px solid #D4AF37;
+            background-color: rgba(212, 175, 55, 0.05);
+        }
+    </style>
+<style>*, ::before, ::after{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }::backdrop{--tw-border-spacing-x:0;--tw-border-spacing-y:0;--tw-translate-x:0;--tw-translate-y:0;--tw-rotate:0;--tw-skew-x:0;--tw-skew-y:0;--tw-scale-x:1;--tw-scale-y:1;--tw-pan-x: ;--tw-pan-y: ;--tw-pinch-zoom: ;--tw-scroll-snap-strictness:proximity;--tw-gradient-from-position: ;--tw-gradient-via-position: ;--tw-gradient-to-position: ;--tw-ordinal: ;--tw-slashed-zero: ;--tw-numeric-figure: ;--tw-numeric-spacing: ;--tw-numeric-fraction: ;--tw-ring-inset: ;--tw-ring-offset-width:0px;--tw-ring-offset-color:#fff;--tw-ring-color:rgb(59 130 246 / 0.5);--tw-ring-offset-shadow:0 0 #0000;--tw-ring-shadow:0 0 #0000;--tw-shadow:0 0 #0000;--tw-shadow-colored:0 0 #0000;--tw-blur: ;--tw-brightness: ;--tw-contrast: ;--tw-grayscale: ;--tw-hue-rotate: ;--tw-invert: ;--tw-saturate: ;--tw-sepia: ;--tw-drop-shadow: ;--tw-backdrop-blur: ;--tw-backdrop-brightness: ;--tw-backdrop-contrast: ;--tw-backdrop-grayscale: ;--tw-backdrop-hue-rotate: ;--tw-backdrop-invert: ;--tw-backdrop-opacity: ;--tw-backdrop-saturate: ;--tw-backdrop-sepia: ;--tw-contain-size: ;--tw-contain-layout: ;--tw-contain-paint: ;--tw-contain-style: }/* ! tailwindcss v3.4.17 | MIT License | https://tailwindcss.com */*,::after,::before{box-sizing:border-box;border-width:0;border-style:solid;border-color:#e5e7eb}::after,::before{--tw-content:''}:host,html{line-height:1.5;-webkit-text-size-adjust:100%;-moz-tab-size:4;tab-size:4;font-family:Pretendard, Noto Sans KR, Inter, sans-serif;font-feature-settings:normal;font-variation-settings:normal;-webkit-tap-highlight-color:transparent}body{margin:0;line-height:inherit}hr{height:0;color:inherit;border-top-width:1px}abbr:where([title]){-webkit-text-decoration:underline dotted;text-decoration:underline dotted}h1,h2,h3,h4,h5,h6{font-size:inherit;font-weight:inherit}a{color:inherit;text-decoration:inherit}b,strong{font-weight:bolder}code,kbd,pre,samp{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;font-feature-settings:normal;font-variation-settings:normal;font-size:1em}small{font-size:80%}sub,sup{font-size:75%;line-height:0;position:relative;vertical-align:baseline}sub{bottom:-.25em}sup{top:-.5em}table{text-indent:0;border-color:inherit;border-collapse:collapse}button,input,optgroup,select,textarea{font-family:inherit;font-feature-settings:inherit;font-variation-settings:inherit;font-size:100%;font-weight:inherit;line-height:inherit;letter-spacing:inherit;color:inherit;margin:0;padding:0}button,select{text-transform:none}button,input:where([type=button]),input:where([type=reset]),input:where([type=submit]){-webkit-appearance:button;background-color:transparent;background-image:none}:-moz-focusring{outline:auto}:-moz-ui-invalid{box-shadow:none}progress{vertical-align:baseline}::-webkit-inner-spin-button,::-webkit-outer-spin-button{height:auto}[type=search]{-webkit-appearance:textfield;outline-offset:-2px}::-webkit-search-decoration{-webkit-appearance:none}::-webkit-file-upload-button{-webkit-appearance:button;font:inherit}summary{display:list-item}blockquote,dd,dl,figure,h1,h2,h3,h4,h5,h6,hr,p,pre{margin:0}fieldset{margin:0;padding:0}legend{padding:0}menu,ol,ul{list-style:none;margin:0;padding:0}dialog{padding:0}textarea{resize:vertical}input::placeholder,textarea::placeholder{opacity:1;color:#9ca3af}[role=button],button{cursor:pointer}:disabled{cursor:default}audio,canvas,embed,iframe,img,object,svg,video{display:block;vertical-align:middle}img,video{max-width:100%;height:auto}[hidden]:where(:not([hidden=until-found])){display:none}.pointer-events-none{pointer-events:none}.fixed{position:fixed}.absolute{position:absolute}.relative{position:relative}.inset-0{inset:0px}.bottom-0{bottom:0px}.bottom-1\/4{bottom:25%}.bottom-6{bottom:1.5rem}.left-0{left:0px}.left-1\/2{left:50%}.left-10{left:2.5rem}.right-0{right:0px}.right-10{right:2.5rem}.right-4{right:1rem}.right-6{right:1.5rem}.top-0{top:0px}.top-1\/4{top:25%}.top-2{top:0.5rem}.top-24{top:6rem}.top-4{top:1rem}.top-6{top:1.5rem}.z-10{z-index:10}.z-20{z-index:20}.z-40{z-index:40}.z-50{z-index:50}.z-\[100\]{z-index:100}.z-\[150\]{z-index:150}.z-\[200\]{z-index:200}.mx-auto{margin-left:auto;margin-right:auto}.my-2{margin-top:0.5rem;margin-bottom:0.5rem}.mb-1{margin-bottom:0.25rem}.mb-12{margin-bottom:3rem}.mb-2{margin-bottom:0.5rem}.mb-3{margin-bottom:0.75rem}.mb-4{margin-bottom:1rem}.mb-6{margin-bottom:1.5rem}.mr-1{margin-right:0.25rem}.mt-1{margin-top:0.25rem}.mt-12{margin-top:3rem}.mt-2{margin-top:0.5rem}.mt-4{margin-top:1rem}.mt-6{margin-top:1.5rem}.block{display:block}.inline-block{display:inline-block}.flex{display:flex}.inline-flex{display:inline-flex}.grid{display:grid}.hidden{display:none}.h-10{height:2.5rem}.h-12{height:3rem}.h-2{height:0.5rem}.h-5{height:1.25rem}.h-64{height:16rem}.h-72{height:18rem}.h-8{height:2rem}.h-96{height:24rem}.h-\[300px\]{height:300px}.h-\[320px\]{height:320px}.h-full{height:100%}.max-h-\[90vh\]{max-height:90vh}.w-10{width:2.5rem}.w-12{width:3rem}.w-2{width:0.5rem}.w-5{width:1.25rem}.w-72{width:18rem}.w-8{width:2rem}.w-96{width:24rem}.w-full{width:100%}.max-w-2xl{max-width:42rem}.max-w-4xl{max-width:56rem}.max-w-5xl{max-width:64rem}.max-w-7xl{max-width:80rem}.max-w-sm{max-width:24rem}.flex-1{flex:1 1 0%}.-translate-x-1\/2{--tw-translate-x:-50%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.-translate-y-full{--tw-translate-y:-100%;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-0{--tw-translate-y:0px;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.translate-y-2{--tw-translate-y:0.5rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.transform{transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}@keyframes ping{75%, 100%{transform:scale(2);opacity:0}}.animate-ping{animation:ping 1s cubic-bezier(0, 0, 0.2, 1) infinite}@keyframes pulse{50%{opacity:.5}}.animate-pulse{animation:pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite}.cursor-grab{cursor:grab}.cursor-pointer{cursor:pointer}.grid-cols-1{grid-template-columns:repeat(1, minmax(0, 1fr))}.grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.flex-col{flex-direction:column}.flex-wrap{flex-wrap:wrap}.items-start{align-items:flex-start}.items-center{align-items:center}.justify-center{justify-content:center}.justify-between{justify-content:space-between}.gap-12{gap:3rem}.gap-2{gap:0.5rem}.gap-3{gap:0.75rem}.gap-4{gap:1rem}.gap-8{gap:2rem}.space-x-1 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.25rem * var(--tw-space-x-reverse));margin-left:calc(0.25rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-1\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.375rem * var(--tw-space-x-reverse));margin-left:calc(0.375rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-2 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.5rem * var(--tw-space-x-reverse));margin-left:calc(0.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-3 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(0.75rem * var(--tw-space-x-reverse));margin-left:calc(0.75rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-4 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1rem * var(--tw-space-x-reverse));margin-left:calc(1rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-6 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(1.5rem * var(--tw-space-x-reverse));margin-left:calc(1.5rem * calc(1 - var(--tw-space-x-reverse)))}.space-x-8 > :not([hidden]) ~ :not([hidden]){--tw-space-x-reverse:0;margin-right:calc(2rem * var(--tw-space-x-reverse));margin-left:calc(2rem * calc(1 - var(--tw-space-x-reverse)))}.space-y-1 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.25rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.25rem * var(--tw-space-y-reverse))}.space-y-2 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.5rem * var(--tw-space-y-reverse))}.space-y-2\.5 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.625rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.625rem * var(--tw-space-y-reverse))}.space-y-3 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0.75rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0.75rem * var(--tw-space-y-reverse))}.space-y-4 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1rem * var(--tw-space-y-reverse))}.space-y-6 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(1.5rem * var(--tw-space-y-reverse))}.space-y-8 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(2rem * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(2rem * var(--tw-space-y-reverse))}.overflow-hidden{overflow:hidden}.overflow-y-auto{overflow-y:auto}.overflow-x-hidden{overflow-x:hidden}.scroll-smooth{scroll-behavior:smooth}.rounded{border-radius:0.25rem}.rounded-2xl{border-radius:1rem}.rounded-3xl{border-radius:1.5rem}.rounded-full{border-radius:9999px}.rounded-lg{border-radius:0.5rem}.rounded-xl{border-radius:0.75rem}.border{border-width:1px}.border-0{border-width:0px}.border-b{border-bottom-width:1px}.border-t{border-top-width:1px}.border-t-2{border-top-width:2px}.border-brand-accent{--tw-border-opacity:1;border-color:rgb(147 104 212 / var(--tw-border-opacity, 1))}.border-brand-accent\/30{border-color:rgb(147 104 212 / 0.3)}.border-brand-gold\/30{border-color:rgb(212 175 55 / 0.3)}.border-brand-primary{--tw-border-opacity:1;border-color:rgb(77 45 127 / var(--tw-border-opacity, 1))}.border-purple-100{--tw-border-opacity:1;border-color:rgb(243 232 255 / var(--tw-border-opacity, 1))}.border-purple-50{--tw-border-opacity:1;border-color:rgb(250 245 255 / var(--tw-border-opacity, 1))}.border-purple-950{--tw-border-opacity:1;border-color:rgb(59 7 100 / var(--tw-border-opacity, 1))}.border-red-800{--tw-border-opacity:1;border-color:rgb(153 27 27 / var(--tw-border-opacity, 1))}.border-white\/10{border-color:rgb(255 255 255 / 0.1)}.border-white\/5{border-color:rgb(255 255 255 / 0.05)}.bg-\[\#2DB400\]{--tw-bg-opacity:1;background-color:rgb(45 180 0 / var(--tw-bg-opacity, 1))}.bg-black{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.bg-brand-accent{--tw-bg-opacity:1;background-color:rgb(147 104 212 / var(--tw-bg-opacity, 1))}.bg-brand-accent\/10{background-color:rgb(147 104 212 / 0.1)}.bg-brand-cream{--tw-bg-opacity:1;background-color:rgb(250 248 245 / var(--tw-bg-opacity, 1))}.bg-brand-dark{--tw-bg-opacity:1;background-color:rgb(36 17 61 / var(--tw-bg-opacity, 1))}.bg-brand-dark\/20{background-color:rgb(36 17 61 / 0.2)}.bg-brand-deep{--tw-bg-opacity:1;background-color:rgb(18 7 33 / var(--tw-bg-opacity, 1))}.bg-brand-deep\/20{background-color:rgb(18 7 33 / 0.2)}.bg-brand-deep\/80{background-color:rgb(18 7 33 / 0.8)}.bg-brand-deep\/95{background-color:rgb(18 7 33 / 0.95)}.bg-brand-gold{--tw-bg-opacity:1;background-color:rgb(212 175 55 / var(--tw-bg-opacity, 1))}.bg-brand-lightGray{--tw-bg-opacity:1;background-color:rgb(240 230 255 / var(--tw-bg-opacity, 1))}.bg-brand-primary{--tw-bg-opacity:1;background-color:rgb(77 45 127 / var(--tw-bg-opacity, 1))}.bg-purple-100{--tw-bg-opacity:1;background-color:rgb(243 232 255 / var(--tw-bg-opacity, 1))}.bg-purple-200\/20{background-color:rgb(233 213 255 / 0.2)}.bg-purple-50{--tw-bg-opacity:1;background-color:rgb(250 245 255 / var(--tw-bg-opacity, 1))}.bg-red-950\/40{background-color:rgb(69 10 10 / 0.4)}.bg-transparent{background-color:transparent}.bg-white{--tw-bg-opacity:1;background-color:rgb(255 255 255 / var(--tw-bg-opacity, 1))}.bg-white\/10{background-color:rgb(255 255 255 / 0.1)}.bg-white\/5{background-color:rgb(255 255 255 / 0.05)}.bg-white\/90{background-color:rgb(255 255 255 / 0.9)}.bg-\[radial-gradient\(ellipse_at_bottom_right\2c _var\(--tw-gradient-stops\)\)\]{background-image:radial-gradient(ellipse at bottom right, var(--tw-gradient-stops))}.bg-gradient-to-b{background-image:linear-gradient(to bottom, var(--tw-gradient-stops))}.bg-gradient-to-tr{background-image:linear-gradient(to top right, var(--tw-gradient-stops))}.from-\[\#f9ce34\]{--tw-gradient-from:#f9ce34 var(--tw-gradient-from-position);--tw-gradient-to:rgb(249 206 52 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-brand-cream{--tw-gradient-from:#FAF8F5 var(--tw-gradient-from-position);--tw-gradient-to:rgb(250 248 245 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.from-brand-primary\/40{--tw-gradient-from:rgb(77 45 127 / 0.4) var(--tw-gradient-from-position);--tw-gradient-to:rgb(77 45 127 / 0) var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), var(--tw-gradient-to)}.via-\[\#ee2a7b\]{--tw-gradient-to:rgb(238 42 123 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), #ee2a7b var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-brand-deep\/10{--tw-gradient-to:rgb(18 7 33 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(18 7 33 / 0.1) var(--tw-gradient-via-position), var(--tw-gradient-to)}.via-purple-50\/50{--tw-gradient-to:rgb(250 245 255 / 0)  var(--tw-gradient-to-position);--tw-gradient-stops:var(--tw-gradient-from), rgb(250 245 255 / 0.5) var(--tw-gradient-via-position), var(--tw-gradient-to)}.to-\[\#6228d7\]{--tw-gradient-to:#6228d7 var(--tw-gradient-to-position)}.to-brand-cream{--tw-gradient-to:#FAF8F5 var(--tw-gradient-to-position)}.to-transparent{--tw-gradient-to:transparent var(--tw-gradient-to-position)}.object-cover{object-fit:cover}.p-0{padding:0px}.p-1{padding:0.25rem}.p-3{padding:0.75rem}.p-4{padding:1rem}.p-5{padding:1.25rem}.p-6{padding:1.5rem}.p-8{padding:2rem}.px-2{padding-left:0.5rem;padding-right:0.5rem}.px-2\.5{padding-left:0.625rem;padding-right:0.625rem}.px-3{padding-left:0.75rem;padding-right:0.75rem}.px-4{padding-left:1rem;padding-right:1rem}.px-5{padding-left:1.25rem;padding-right:1.25rem}.py-0\.5{padding-top:0.125rem;padding-bottom:0.125rem}.py-1{padding-top:0.25rem;padding-bottom:0.25rem}.py-1\.5{padding-top:0.375rem;padding-bottom:0.375rem}.py-12{padding-top:3rem;padding-bottom:3rem}.py-2{padding-top:0.5rem;padding-bottom:0.5rem}.py-20{padding-top:5rem;padding-bottom:5rem}.py-3{padding-top:0.75rem;padding-bottom:0.75rem}.py-3\.5{padding-top:0.875rem;padding-bottom:0.875rem}.py-4{padding-top:1rem;padding-bottom:1rem}.py-8{padding-top:2rem;padding-bottom:2rem}.pb-1\.5{padding-bottom:0.375rem}.pb-4{padding-bottom:1rem}.pt-2{padding-top:0.5rem}.pt-24{padding-top:6rem}.pt-3{padding-top:0.75rem}.pt-4{padding-top:1rem}.pt-6{padding-top:1.5rem}.text-center{text-align:center}.font-sans{font-family:Pretendard, Noto Sans KR, Inter, sans-serif}.font-serif{font-family:Playfair Display, Chosunilbo_myungjo, Georgia, serif}.text-2xl{font-size:1.5rem;line-height:2rem}.text-3xl{font-size:1.875rem;line-height:2.25rem}.text-4xl{font-size:2.25rem;line-height:2.5rem}.text-\[10px\]{font-size:10px}.text-\[11px\]{font-size:11px}.text-base{font-size:1rem;line-height:1.5rem}.text-lg{font-size:1.125rem;line-height:1.75rem}.text-sm{font-size:0.875rem;line-height:1.25rem}.text-xl{font-size:1.25rem;line-height:1.75rem}.text-xs{font-size:0.75rem;line-height:1rem}.font-bold{font-weight:700}.font-medium{font-weight:500}.font-semibold{font-weight:600}.uppercase{text-transform:uppercase}.italic{font-style:italic}.leading-relaxed{line-height:1.625}.leading-snug{line-height:1.375}.leading-tight{line-height:1.25}.tracking-tight{letter-spacing:-0.025em}.tracking-wide{letter-spacing:0.025em}.tracking-wider{letter-spacing:0.05em}.tracking-widest{letter-spacing:0.1em}.text-brand-accent{--tw-text-opacity:1;color:rgb(147 104 212 / var(--tw-text-opacity, 1))}.text-brand-dark{--tw-text-opacity:1;color:rgb(36 17 61 / var(--tw-text-opacity, 1))}.text-brand-darkGray{--tw-text-opacity:1;color:rgb(26 26 26 / var(--tw-text-opacity, 1))}.text-brand-deep{--tw-text-opacity:1;color:rgb(18 7 33 / var(--tw-text-opacity, 1))}.text-brand-gold{--tw-text-opacity:1;color:rgb(212 175 55 / var(--tw-text-opacity, 1))}.text-brand-lightGray{--tw-text-opacity:1;color:rgb(240 230 255 / var(--tw-text-opacity, 1))}.text-brand-primary{--tw-text-opacity:1;color:rgb(77 45 127 / var(--tw-text-opacity, 1))}.text-gray-200{--tw-text-opacity:1;color:rgb(229 231 235 / var(--tw-text-opacity, 1))}.text-gray-300{--tw-text-opacity:1;color:rgb(209 213 219 / var(--tw-text-opacity, 1))}.text-gray-400{--tw-text-opacity:1;color:rgb(156 163 175 / var(--tw-text-opacity, 1))}.text-gray-500{--tw-text-opacity:1;color:rgb(107 114 128 / var(--tw-text-opacity, 1))}.text-gray-600{--tw-text-opacity:1;color:rgb(75 85 99 / var(--tw-text-opacity, 1))}.text-gray-700{--tw-text-opacity:1;color:rgb(55 65 81 / var(--tw-text-opacity, 1))}.text-gray-800{--tw-text-opacity:1;color:rgb(31 41 55 / var(--tw-text-opacity, 1))}.text-red-200{--tw-text-opacity:1;color:rgb(254 202 202 / var(--tw-text-opacity, 1))}.text-white{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.text-white\/50{color:rgb(255 255 255 / 0.5)}.opacity-0{opacity:0}.opacity-75{opacity:0.75}.shadow-2xl{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-lg{--tw-shadow:0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 10px 15px -3px var(--tw-shadow-color), 0 4px 6px -4px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-md{--tw-shadow:0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 4px 6px -1px var(--tw-shadow-color), 0 2px 4px -2px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.shadow-xl{--tw-shadow:0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);--tw-shadow-colored:0 20px 25px -5px var(--tw-shadow-color), 0 8px 10px -6px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.outline-none{outline:2px solid transparent;outline-offset:2px}.blur-\[100px\]{--tw-blur:blur(100px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.blur-\[120px\]{--tw-blur:blur(120px);filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.filter{filter:var(--tw-blur) var(--tw-brightness) var(--tw-contrast) var(--tw-grayscale) var(--tw-hue-rotate) var(--tw-invert) var(--tw-saturate) var(--tw-sepia) var(--tw-drop-shadow)}.backdrop-blur-sm{--tw-backdrop-blur:blur(4px);-webkit-backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia);backdrop-filter:var(--tw-backdrop-blur) var(--tw-backdrop-brightness) var(--tw-backdrop-contrast) var(--tw-backdrop-grayscale) var(--tw-backdrop-hue-rotate) var(--tw-backdrop-invert) var(--tw-backdrop-opacity) var(--tw-backdrop-saturate) var(--tw-backdrop-sepia)}.transition{transition-property:color, background-color, border-color, fill, stroke, opacity, box-shadow, transform, filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter, -webkit-text-decoration-color, -webkit-backdrop-filter;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-all{transition-property:all;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-colors{transition-property:color, background-color, border-color, fill, stroke, -webkit-text-decoration-color;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke;transition-property:color, background-color, border-color, text-decoration-color, fill, stroke, -webkit-text-decoration-color;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-opacity{transition-property:opacity;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.transition-transform{transition-property:transform;transition-timing-function:cubic-bezier(0.4, 0, 0.2, 1);transition-duration:150ms}.duration-300{transition-duration:300ms}.duration-500{transition-duration:500ms}.hover\:-translate-y-0\.5:hover{--tw-translate-y:-0.125rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:-translate-y-1:hover{--tw-translate-y:-0.25rem;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:scale-110:hover{--tw-scale-x:1.1;--tw-scale-y:1.1;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.hover\:bg-black:hover{--tw-bg-opacity:1;background-color:rgb(0 0 0 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-dark:hover{--tw-bg-opacity:1;background-color:rgb(36 17 61 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-deep:hover{--tw-bg-opacity:1;background-color:rgb(18 7 33 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-lightGray:hover{--tw-bg-opacity:1;background-color:rgb(240 230 255 / var(--tw-bg-opacity, 1))}.hover\:bg-brand-primary:hover{--tw-bg-opacity:1;background-color:rgb(77 45 127 / var(--tw-bg-opacity, 1))}.hover\:bg-red-900:hover{--tw-bg-opacity:1;background-color:rgb(127 29 29 / var(--tw-bg-opacity, 1))}.hover\:bg-white\/10:hover{background-color:rgb(255 255 255 / 0.1)}.hover\:bg-white\/20:hover{background-color:rgb(255 255 255 / 0.2)}.hover\:bg-yellow-500:hover{--tw-bg-opacity:1;background-color:rgb(234 179 8 / var(--tw-bg-opacity, 1))}.hover\:text-brand-accent:hover{--tw-text-opacity:1;color:rgb(147 104 212 / var(--tw-text-opacity, 1))}.hover\:text-brand-gold:hover{--tw-text-opacity:1;color:rgb(212 175 55 / var(--tw-text-opacity, 1))}.hover\:text-brand-primary:hover{--tw-text-opacity:1;color:rgb(77 45 127 / var(--tw-text-opacity, 1))}.hover\:text-white:hover{--tw-text-opacity:1;color:rgb(255 255 255 / var(--tw-text-opacity, 1))}.hover\:opacity-90:hover{opacity:0.9}.hover\:shadow-2xl:hover{--tw-shadow:0 25px 50px -12px rgb(0 0 0 / 0.25);--tw-shadow-colored:0 25px 50px -12px var(--tw-shadow-color);box-shadow:var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow)}.focus\:border-brand-primary:focus{--tw-border-opacity:1;border-color:rgb(77 45 127 / var(--tw-border-opacity, 1))}.focus\:outline-none:focus{outline:2px solid transparent;outline-offset:2px}.active\:cursor-grabbing:active{cursor:grabbing}.group:hover .group-hover\:scale-105{--tw-scale-x:1.05;--tw-scale-y:1.05;transform:translate(var(--tw-translate-x), var(--tw-translate-y)) rotate(var(--tw-rotate)) skewX(var(--tw-skew-x)) skewY(var(--tw-skew-y)) scaleX(var(--tw-scale-x)) scaleY(var(--tw-scale-y))}.group:hover .group-hover\:opacity-100{opacity:1}@media (min-width: 640px){.sm\:inline-block{display:inline-block}.sm\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.sm\:flex-row{flex-direction:row}.sm\:space-y-0 > :not([hidden]) ~ :not([hidden]){--tw-space-y-reverse:0;margin-top:calc(0px * calc(1 - var(--tw-space-y-reverse)));margin-bottom:calc(0px * var(--tw-space-y-reverse))}.sm\:p-12{padding:3rem}.sm\:p-8{padding:2rem}.sm\:text-2xl{font-size:1.5rem;line-height:2rem}.sm\:text-3xl{font-size:1.875rem;line-height:2.25rem}.sm\:text-4xl{font-size:2.25rem;line-height:2.5rem}.sm\:text-5xl{font-size:3rem;line-height:1}.sm\:text-base{font-size:1rem;line-height:1.5rem}.sm\:text-lg{font-size:1.125rem;line-height:1.75rem}.sm\:text-sm{font-size:0.875rem;line-height:1.25rem}}@media (min-width: 768px){.md\:col-span-2{grid-column:span 2 / span 2}.md\:col-span-5{grid-column:span 5 / span 5}.md\:col-span-7{grid-column:span 7 / span 7}.md\:flex{display:flex}.md\:hidden{display:none}.md\:h-full{height:100%}.md\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.md\:grid-cols-2{grid-template-columns:repeat(2, minmax(0, 1fr))}.md\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}.md\:grid-cols-4{grid-template-columns:repeat(4, minmax(0, 1fr))}.md\:flex-row{flex-direction:row}.md\:items-end{align-items:flex-end}.md\:border-l{border-left-width:1px}.md\:border-t-0{border-top-width:0px}.md\:pl-4{padding-left:1rem}.md\:pt-0{padding-top:0px}.md\:text-6xl{font-size:3.75rem;line-height:1}}@media (min-width: 1024px){.lg\:col-span-5{grid-column:span 5 / span 5}.lg\:col-span-7{grid-column:span 7 / span 7}.lg\:grid-cols-12{grid-template-columns:repeat(12, minmax(0, 1fr))}.lg\:grid-cols-3{grid-template-columns:repeat(3, minmax(0, 1fr))}}</style></head>
+
+<body class="bg-brand-cream text-brand-darkGray font-sans overflow-x-hidden no-select">
+
+    <!-- Admin Controls Floating Bar -->
+    <div id="admin-bar" class="fixed top-0 left-0 right-0 z-[100] bg-brand-deep text-white shadow-2xl border-b border-brand-gold/30 transition-all duration-300 hidden -translate-y-full">
+        <div class="max-w-7xl mx-auto px-5 py-3 flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <span class="bg-brand-gold text-brand-deep font-bold text-xs px-2.5 py-1 rounded-full uppercase tracking-wider animate-pulse">Admin Mode</span>
+                <span class="text-xs text-brand-lightGray hidden sm:inline-block">수정 후 반드시 우측 "배포용 파일 다운로드" 버튼을 눌러 파일을 다운받고 깃허브에 올리셔야 공유 시 적용됩니다!</span>
+            </div>
+            
+            <!-- Rich Text Formatting Controls -->
+            <div class="flex items-center flex-wrap gap-2 bg-white/5 p-1 rounded-lg border border-white/10">
+                <button onclick="formatText('bold')" class="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded transition text-sm" title="굵게"><i class="fa-solid fa-bold"></i></button>
+                <button onclick="formatText('italic')" class="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded transition text-sm" title="기울임"><i class="fa-solid fa-italic"></i></button>
+                <select onchange="formatText('fontSize', this.value)" class="bg-brand-dark border border-white/10 rounded px-2 py-1 text-xs outline-none text-white cursor-pointer">
+                    <option value="3">본문 (중)</option>
+                    <option value="4">본문 (대)</option>
+                    <option value="5">부제목</option>
+                    <option value="6">대제목</option>
+                </select>
+                <div class="flex items-center space-x-1.5 px-2 py-1 bg-brand-dark border border-white/10 rounded">
+                    <i class="fa-solid fa-palette text-xs text-brand-accent"></i>
+                    <input type="color" onchange="formatText('foreColor', this.value)" class="w-5 h-5 bg-transparent border-0 cursor-pointer p-0" title="글자색 변경">
+                </div>
+                <button onclick="formatText('justifyLeft')" class="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded transition text-sm" title="좌측 정렬"><i class="fa-solid fa-align-left"></i></button>
+                <button onclick="formatText('justifyCenter')" class="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded transition text-sm" title="가운데 정렬"><i class="fa-solid fa-align-center"></i></button>
+                <button onclick="formatText('justifyRight')" class="w-8 h-8 flex items-center justify-center hover:bg-white/10 rounded transition text-sm" title="우측 정렬"><i class="fa-solid fa-align-right"></i></button>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex items-center space-x-2">
+                <button onclick="resetOriginalState()" class="px-3 py-1.5 bg-red-950/40 hover:bg-red-900 border border-red-800 text-xs rounded-full transition-all text-red-200">
+                    <i class="fa-solid fa-rotate-left mr-1"></i> 초기화
+                </button>
+                <button onclick="saveAdminChangesToCache()" class="px-3 py-1.5 bg-brand-dark hover:bg-black text-white text-xs rounded-full transition-all">
+                    임시 저장
+                </button>
+                <button onclick="downloadBakedHTML()" class="px-4 py-1.5 bg-brand-gold hover:bg-yellow-500 text-brand-deep font-bold text-xs rounded-full transition-all flex items-center shadow-lg" title="이 버튼을 눌러야 완전한 index.html이 보존됩니다">
+                    <i class="fa-solid fa-download mr-1"></i> 배포용 파일 다운로드 (HTML)
+                </button>
+                <button onclick="logoutAdmin()" class="px-3 py-1.5 bg-white/10 hover:bg-white/20 border border-white/10 text-xs rounded-full transition-all">
+                    로그아웃
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hidden Native File Input for Admin Image Upload -->
+    <input type="file" id="admin-file-picker" accept="image/*" class="hidden">
+
+    <!-- Header Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 glass-nav border-b border-purple-100 transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-5 py-4 flex items-center justify-between">
+            <!-- Brand Logo -->
+            <a href="#" class="flex items-center space-x-2">
+                <span class="font-serif text-2xl font-bold text-brand-dark tracking-wide">
+                    Design <span class="text-brand-primary">by Dorothy</span>
+                </span>
+                <span class="text-xs bg-brand-primary text-white font-medium px-2 py-0.5 rounded-full hidden sm:inline-block">디자인바이도로시</span>
+            </a>
+
+            <!-- Navigation Links (Desktop) -->
+            <nav class="hidden md:flex space-x-8 text-sm font-medium text-gray-700">
+                <a href="#sec-about" class="hover:text-brand-primary transition-colors py-2">스튜디오 소개</a>
+                <a href="#sec-portfolio" class="hover:text-brand-primary transition-colors py-2">포트폴리오</a>
+                <a href="#sec-contact" class="hover:text-brand-primary transition-colors py-2">상담 문의</a>
+            </nav>
+
+            <!-- Social Links & CTA -->
+            <div class="flex items-center space-x-4">
+                <a href="https://www.instagram.com/d_by_dorothy/" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand-primary transition-colors w-10 h-10 flex items-center justify-center bg-purple-50 rounded-full hover:bg-brand-lightGray" title="인스타그램 방문하기">
+                    <i class="fa-brands fa-instagram text-lg"></i>
+                </a>
+                <a href="https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&amp;tab=1" target="_blank" rel="noopener noreferrer" class="text-gray-600 hover:text-brand-primary transition-colors w-10 h-10 flex items-center justify-center bg-purple-50 rounded-full hover:bg-brand-lightGray" title="네이버블로그 방문하기">
+                    <i class="fa-solid fa-blog text-md"></i>
+                </a>
+                <!-- Mobile Menu Button -->
+                <button id="mobile-menu-btn" class="md:hidden text-brand-dark hover:text-brand-primary focus:outline-none" aria-label="메뉴 열기">
+                    <i class="fa-solid fa-bars text-2xl"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Mobile Menu (Collapsible) -->
+        <div id="mobile-menu" class="hidden md:hidden bg-brand-cream border-t border-purple-100 transition-all duration-300">
+            <div class="px-5 py-4 space-y-3">
+                <a href="#sec-about" class="block text-gray-800 hover:text-brand-primary font-medium py-2">스튜디오 소개</a>
+                <a href="#sec-portfolio" class="block text-gray-800 hover:text-brand-primary font-medium py-2">포트폴리오</a>
+                <a href="#sec-contact" class="block text-gray-800 hover:text-brand-primary font-medium py-2">상담 문의</a>
+                <hr class="border-purple-100 my-2">
+                <div class="flex items-center space-x-3 pt-2">
+                    <a href="https://www.instagram.com/d_by_dorothy/" target="_blank" class="flex-1 bg-purple-50 hover:bg-brand-lightGray py-3 text-center rounded-lg text-brand-primary font-medium flex items-center justify-center space-x-2">
+                        <i class="fa-brands fa-instagram"></i> <span>인스타그램</span>
+                    </a>
+                    <a href="https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&amp;tab=1" target="_blank" class="flex-1 bg-purple-50 hover:bg-brand-lightGray py-3 text-center rounded-lg text-brand-primary font-medium flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-blog"></i> <span>블로그</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main id="main-section-container" class="pt-24"><section id="sec-hero" data-section-id="sec-hero" class="draggable-section relative py-12">
+            <!-- Section Drag Handle (Visible in Admin Mode) -->
+            <div class="section-drag-handle absolute top-2 left-1/2 transform -translate-x-1/2 bg-brand-gold text-brand-deep font-bold text-xs px-4 py-1.5 rounded-full shadow-lg items-center space-x-1 z-40 cursor-grab active:cursor-grabbing">
+                <i class="fa-solid fa-grip-vertical"></i>
+                <span>정렬 이동 영역</span>
+            </div>
+
+            <!-- Title & Slogan Area -->
+            <div class="max-w-7xl mx-auto px-5 pb-4 text-center relative z-10">
+                <div class="inline-block px-4 py-1.5 bg-brand-lightGray rounded-full text-brand-primary text-xs font-bold tracking-widest uppercase mb-4 editable-text" data-edit-id="hero-badge">
+                    Premium Space Artistry
+                </div>
+                <h1 class="font-serif text-4xl sm:text-5xl md:text-6xl text-brand-deep tracking-tight leading-tight max-w-4xl mx-auto font-medium editable-text" data-edit-id="hero-title">공간에 이야기를 담다.</h1>
+                <p class="mt-4 text-base sm:text-lg text-gray-600 max-w-2xl mx-auto leading-relaxed editable-text" data-edit-id="hero-desc">
+                    디자인바이도로시는 광주 광산구 장덕동을 기반으로 3050 하이엔드 라이프스타일을 위한 맞춤형 공간 솔루션을 제안합니다. 당신만의 시그니처 톤과 감성을 공간에 담아 깊이감 있는 일상을 구현합니다.
+                </p>
+            </div>
+
+            <!-- 3D Cylindrical Carousel Section -->
+            <div id="carousel-section" class="relative py-8 bg-gradient-to-b from-brand-cream via-purple-50/50 to-brand-cream overflow-hidden">
+                <div class="absolute top-1/4 left-10 w-72 h-72 bg-brand-accent/10 rounded-full filter blur-[100px] pointer-events-none"></div>
+                <div class="absolute bottom-1/4 right-10 w-96 h-96 bg-purple-200/20 rounded-full filter blur-[120px] pointer-events-none"></div>
+
+                <div class="max-w-7xl mx-auto px-5 relative">
+                    <!-- Instruction tooltip -->
+                    <div class="text-center mb-4 flex justify-center items-center space-x-2 text-xs text-brand-primary font-semibold">
+                        <span class="flex h-2 w-2 relative">
+                            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-brand-accent opacity-75"></span>
+                            <span class="relative inline-flex rounded-full h-2 w-2 bg-brand-primary"></span>
+                        </span>
+                        <span class="editable-text" data-edit-id="carousel-tooltip">마우스 드래그 또는 터치하여 입체적으로 넘겨보세요</span>
+                    </div>
+
+                    <!-- 3D Stage -->
+                    <div class="stage-3d">
+                        <div class="cylinder-3d" id="cylinder">
+                            <!-- Slide 1: Dongcheon Central Park -->
+                            <div class="slide-3d" data-index="0" style="transform: rotateY(0deg) translateZ(290px); opacity: 1; filter: none; z-index: 10;">
+                                <div class="w-full h-full editable-img-container">
+                                    <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="동천동 동천센트럴파크" class="w-full h-full object-cover" data-img-id="car-1">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 z-20 text-white">
+                                    <span class="text-xs text-brand-gold font-bold tracking-widest editable-text" data-edit-id="car-tag-1">DONGCHEON</span>
+                                    <h3 class="text-lg font-serif font-bold mt-1 editable-text" data-edit-id="car-title-1">동천동 동천센트럴파크</h3>
+                                    <p class="text-xs text-gray-200 mt-1 editable-text" data-edit-id="car-desc-1">화사하면서 차분함을 느낄 수 있게</p>
+                                </div>
+                            </div>
+                            <!-- Slide 2: Suwan Daebang -->
+                            <div class="slide-3d" data-index="1" style="transform: rotateY(60deg) translateZ(290px); opacity: 0.65; filter: blur(1px) brightness(0.8); z-index: 5;">
+                                <div class="w-full h-full editable-img-container">
+                                    <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="수완지구 대방노블랜드" class="w-full h-full object-cover" data-img-id="car-2">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 z-20 text-white">
+                                    <span class="text-xs text-brand-gold font-bold tracking-widest editable-text" data-edit-id="car-tag-2">SUWAN</span>
+                                    <h3 class="text-lg font-serif font-bold mt-1 editable-text" data-edit-id="car-title-2">수완지구 대방노블랜드</h3>
+                                    <p class="text-xs text-gray-200 mt-1 editable-text" data-edit-id="car-desc-2">은은함과 편안함이 공존할 수 있게</p>
+                                </div>
+                            </div>
+                            <!-- Slide 3: Bongseon Adelium -->
+                            <div class="slide-3d" data-index="2" style="transform: rotateY(120deg) translateZ(290px); opacity: 0.15; filter: blur(4px) brightness(0.4); z-index: 1;">
+                                <div class="w-full h-full editable-img-container">
+                                    <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="봉선동 한국아델리움" class="w-full h-full object-cover" data-img-id="car-3">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 z-20 text-white">
+                                    <span class="text-xs text-brand-gold font-bold tracking-widest editable-text" data-edit-id="car-tag-3">BONGSEON</span>
+                                    <h3 class="text-lg font-serif font-bold mt-1 editable-text" data-edit-id="car-title-3">봉선동 한국아델리움</h3>
+                                    <p class="text-xs text-gray-200 mt-1 editable-text" data-edit-id="car-desc-3">대면형 아일랜드와 수납공간을 넉넉하게</p>
+                                </div>
+                            </div>
+                            <!-- Slide 4: Jangdeok Hoban -->
+                            <div class="slide-3d" data-index="3" style="transform: rotateY(180deg) translateZ(290px); opacity: 0.15; filter: blur(4px) brightness(0.4); z-index: 1;">
+                                <div class="w-full h-full editable-img-container">
+                                    <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="장덕동 호반베르디움" class="w-full h-full object-cover" data-img-id="car-4">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 z-20 text-white">
+                                    <span class="text-xs text-brand-gold font-bold tracking-widest editable-text" data-edit-id="car-tag-4">JANGDEOK</span>
+                                    <h3 class="text-lg font-serif font-bold mt-1 editable-text" data-edit-id="car-title-4">장덕동 호반베르디움</h3>
+                                    <p class="text-xs text-gray-200 mt-1 editable-text" data-edit-id="car-desc-4">레이아웃을 매끄럽게 정리하여 완성도를 높였습니다.</p>
+                                </div>
+                            </div>
+                            <!-- Slide 5: Suwan Hyunjin -->
+                            <div class="slide-3d" data-index="4" style="transform: rotateY(240deg) translateZ(290px); opacity: 0.15; filter: blur(4px) brightness(0.4); z-index: 1;">
+                                <div class="w-full h-full editable-img-container">
+                                    <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="수완지구 현진에버빌" class="w-full h-full object-cover" data-img-id="car-5">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 z-20 text-white">
+                                    <span class="text-xs text-brand-gold font-bold tracking-widest editable-text" data-edit-id="car-tag-5">SUWAN</span>
+                                    <h3 class="text-lg font-serif font-bold mt-1 editable-text" data-edit-id="car-title-5">수완지구 현진에버빌</h3>
+                                    <p class="text-xs text-gray-200 mt-1 editable-text" data-edit-id="car-desc-5">라인과 면을 정돈하여 깔끔하게</p>
+                                </div>
+                            </div>
+                            <!-- Slide 6: Chipyeong Kumho -->
+                            <div class="slide-3d" data-index="5" style="transform: rotateY(300deg) translateZ(290px); opacity: 0.65; filter: blur(1px) brightness(0.8); z-index: 5;">
+                                <div class="w-full h-full editable-img-container">
+                                    <img src="https://images.unsplash.com/photo-1617806118233-18e1db207f62?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="치평동 금호쌍용" class="w-full h-full object-cover" data-img-id="car-6">
+                                </div>
+                                <div class="absolute bottom-0 left-0 right-0 p-5 z-20 text-white">
+                                    <span class="text-xs text-brand-gold font-bold tracking-widest editable-text" data-edit-id="car-tag-6">CHIPYEONG</span>
+                                    <h3 class="text-lg font-serif font-bold mt-1 editable-text" data-edit-id="car-title-6">치평동 금호쌍용</h3>
+                                    <p class="text-xs text-gray-200 mt-1 editable-text" data-edit-id="car-desc-6">감각적인 조명 구성과 아늑한 공간감</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Carousel Controls (Desktop/Tablet) -->
+                    <div class="flex items-center justify-center space-x-6 mt-6">
+                        <button id="prev-btn" class="w-12 h-12 rounded-full border border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white transition-all flex items-center justify-center focus:outline-none" aria-label="이전 이미지">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <div id="carousel-indicator" class="text-sm font-serif text-brand-dark tracking-wider">
+                            <span class="font-bold text-brand-primary">1</span> / 6
+                        </div>
+                        <button id="next-btn" class="w-12 h-12 rounded-full border border-brand-primary text-brand-primary hover:bg-brand-primary hover:text-white transition-all flex items-center justify-center focus:outline-none" aria-label="다음 이미지">
+                            <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </section><section id="sec-about" data-section-id="sec-about" class="draggable-section py-20 bg-brand-cream relative">
+            <div class="section-drag-handle absolute top-2 left-1/2 transform -translate-x-1/2 bg-brand-gold text-brand-deep font-bold text-xs px-4 py-1.5 rounded-full shadow-lg items-center space-x-1 z-40 cursor-grab active:cursor-grabbing">
+                <i class="fa-solid fa-grip-vertical"></i>
+                <span>정렬 이동 영역</span>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-5">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                    
+                    <!-- Left: Studio Identity Copy -->
+                    <div class="lg:col-span-5 space-y-6">
+                        <div class="inline-block px-3 py-1 bg-purple-100 text-brand-primary text-xs font-bold uppercase rounded editable-text" data-edit-id="about-badge">
+                            Our Philosophy
+                        </div>
+                        <h2 class="font-serif text-3xl sm:text-4xl text-brand-dark font-medium leading-tight editable-text" data-edit-id="about-title">
+                            광주를 대표하는<br>
+                            <span class="text-brand-primary font-bold">하이엔드 인테리어 파트너</span>
+                        </h2>
+                        <div class="space-y-4 text-gray-600 leading-relaxed text-sm sm:text-base">
+                            <p class="editable-text" data-edit-id="about-desc-1">
+                                디자인바이도로시는 단순한 공간 설계를 넘어, 클라이언트의 하이엔드 라이프스타일과 공간의 본질이 깊이 있게 어우러지는 최고의 디자인 밸런스를 목표로 정밀 큐레이션을 제안합니다.
+                            </p>
+                            <p class="editable-text" data-edit-id="about-desc-2">
+                                보랏빛 아메시스트 악센트와 샴페인 골드, 대리석 마블의 정갈한 라인을 수놓고 시공 오차를 줄여 머무르는 모든 시공 영역이 한 폭의 예술로 감각되도록 정교한 솔루션을 드립니다.
+                            </p>
+                        </div>
+                        <div class="pt-4 flex flex-col sm:flex-row gap-4">
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-brand-lightGray rounded-full flex items-center justify-center text-brand-primary">
+                                    <i class="fa-solid fa-ruler-combined"></i>
+                                </div>
+                                <span class="text-sm font-semibold text-brand-dark editable-text" data-edit-id="about-feat-1">정교한 1:1 맞춤형 공간 큐레이션</span>
+                            </div>
+                            <div class="flex items-center space-x-3">
+                                <div class="w-10 h-10 bg-brand-lightGray rounded-full flex items-center justify-center text-brand-primary">
+                                    <i class="fa-solid fa-palette"></i>
+                                </div>
+                                <span class="text-sm font-semibold text-brand-dark editable-text" data-edit-id="about-feat-2">보랏빛 &amp; 골드 메탈의 완벽한 밸런스</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right: Aesthetic Image with Spatial Design Process Grid -->
+                    <div class="lg:col-span-7 space-y-6">
+                        <div class="rounded-2xl overflow-hidden shadow-2xl relative editable-img-container">
+                            <img src="https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&amp;fit=crop&amp;w=1000&amp;q=80" alt="디자인바이도로시 인테리어 공간 연출" class="w-full object-cover h-[320px]" data-img-id="about-main">
+                        </div>
+                        
+                        <!-- Premium Spatial Design Process Grid -->
+                        <div class="bg-brand-dark text-white p-6 rounded-2xl shadow-xl border-t-2 border-brand-accent grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="space-y-1">
+                                <span class="text-brand-gold font-serif text-sm font-bold">STEP 01</span>
+                                <h4 class="text-xs font-bold editable-text" data-edit-id="process-t1">1:1 맞춤 대면 컨설팅</h4>
+                                <p class="text-[11px] text-gray-400 leading-relaxed editable-text" data-edit-id="process-d1">공간을 직관하며 고객 요구와 톤을 매칭하는 분석 단계</p>
+                            </div>
+                            <div class="space-y-1 border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-4">
+                                <span class="text-brand-gold font-serif text-sm font-bold">STEP 02</span>
+                                <h4 class="text-xs font-bold editable-text" data-edit-id="process-t2">정밀 레이아웃 설계</h4>
+                                <p class="text-[11px] text-gray-400 leading-relaxed editable-text" data-edit-id="process-d2">라인과 마블, 동선의 디테일을 완성하는 고화질 컨셉 제안</p>
+                            </div>
+                            <div class="space-y-1 border-t md:border-t-0 md:border-l border-white/10 pt-3 md:pt-0 md:pl-4">
+                                <span class="text-brand-gold font-serif text-sm font-bold">STEP 03</span>
+                                <h4 class="text-xs font-bold editable-text" data-edit-id="process-t3">시그니처 밀착 시공</h4>
+                                <p class="text-[11px] text-gray-400 leading-relaxed editable-text" data-edit-id="process-d3">디자인바이도로시 전문 설계 공정의 오차 없는 현장 연출</p>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section><section id="sec-portfolio" data-section-id="sec-portfolio" class="draggable-section py-20 bg-white relative">
+            <div class="section-drag-handle absolute top-2 left-1/2 transform -translate-x-1/2 bg-brand-gold text-brand-deep font-bold text-xs px-4 py-1.5 rounded-full shadow-lg items-center space-x-1 z-40 cursor-grab active:cursor-grabbing">
+                <i class="fa-solid fa-grip-vertical"></i>
+                <span>정렬 이동 영역</span>
+            </div>
+
+            <div class="max-w-7xl mx-auto px-5">
+                <div class="flex flex-col md:flex-row md:items-end justify-between mb-12">
+                    <div>
+                        <div class="text-brand-primary text-xs font-bold tracking-widest uppercase mb-2 editable-text" data-edit-id="port-badge">Space Showcase</div>
+                        <h2 class="font-serif text-3xl sm:text-4xl text-brand-dark font-medium editable-text" data-edit-id="port-title">도로시 포트폴리오 컬렉션</h2>
+                    </div>
+                </div>
+
+                <!-- Portfolio Grid -->
+                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolio-grid">
+                    
+                    <!-- Portfolio Item 1 -->
+                    <div class="portfolio-item group cursor-pointer bg-brand-cream rounded-2xl overflow-hidden shadow-md transition-all hover:shadow-2xl hover:-translate-y-1 transform duration-300" onclick="openLightbox(0)">
+                        <div class="h-64 overflow-hidden relative editable-img-container">
+                            <img src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="동천동 동천센트럴파크" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-img-id="port-img-1">
+                            <div class="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white/90 text-brand-primary w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-plus text-lg"></i></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-semibold text-brand-primary uppercase editable-text" data-edit-id="port-cat-1">DONGCHEON</span>
+                            <h3 class="text-lg font-bold text-brand-dark mt-1 font-serif editable-text" data-edit-id="port-title-1">동천동 동천센트럴파크</h3>
+                            <p class="text-xs text-gray-500 mt-2 editable-text" data-edit-id="port-desc-1">화사하면서 차분함을 느낄 수 있게 정밀 매칭한 시그니처 갤러리 리빙 무드</p>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 2 -->
+                    <div class="portfolio-item group cursor-pointer bg-brand-cream rounded-2xl overflow-hidden shadow-md transition-all hover:shadow-2xl hover:-translate-y-1 transform duration-300" onclick="openLightbox(1)">
+                        <div class="h-64 overflow-hidden relative editable-img-container">
+                            <img src="https://images.unsplash.com/photo-1616594039964-ae9021a400a0?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="수완지구 대방노블랜드" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-img-id="port-img-2">
+                            <div class="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white/90 text-brand-primary w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-plus text-lg"></i></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-semibold text-brand-primary uppercase editable-text" data-edit-id="port-cat-2">SUWAN</span>
+                            <h3 class="text-lg font-bold text-brand-dark mt-1 font-serif editable-text" data-edit-id="port-title-2">수완지구 대방노블랜드</h3>
+                            <p class="text-xs text-gray-500 mt-2 editable-text" data-edit-id="port-desc-2">은은함과 편안함이 공존할 수 있게 수놓아진 최고급 침실 웰니스 수트룸</p>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 3 -->
+                    <div class="portfolio-item group cursor-pointer bg-brand-cream rounded-2xl overflow-hidden shadow-md transition-all hover:shadow-2xl hover:-translate-y-1 transform duration-300" onclick="openLightbox(2)">
+                        <div class="h-64 overflow-hidden relative editable-img-container">
+                            <img src="https://images.unsplash.com/photo-1556911220-e15b29be8c8f?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="봉선동 한국아델리움" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-img-id="port-img-3">
+                            <div class="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white/90 text-brand-primary w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-plus text-lg"></i></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-semibold text-brand-primary uppercase editable-text" data-edit-id="port-cat-3">BONGSEON</span>
+                            <h3 class="text-lg font-bold text-brand-dark mt-1 font-serif editable-text" data-edit-id="port-title-3">봉선동 한국아델리움</h3>
+                            <p class="text-xs text-gray-500 mt-2 editable-text" data-edit-id="port-desc-3">대면형 아일랜드와 수납공간을 넉넉하게 매립 시공한 주방 리모델링</p>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 4 -->
+                    <div class="portfolio-item group cursor-pointer bg-brand-cream rounded-2xl overflow-hidden shadow-md transition-all hover:shadow-2xl hover:-translate-y-1 transform duration-300" onclick="openLightbox(3)">
+                        <div class="h-64 overflow-hidden relative editable-img-container">
+                            <img src="https://images.unsplash.com/photo-1552321554-5fefe8c9ef14?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="장덕동 호반베르디움" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-img-id="port-img-4">
+                            <div class="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white/90 text-brand-primary w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-plus text-lg"></i></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-semibold text-brand-primary uppercase editable-text" data-edit-id="port-cat-4">JANGDEOK</span>
+                            <h3 class="text-lg font-bold text-brand-dark mt-1 font-serif editable-text" data-edit-id="port-title-4">장덕동 호반베르디움</h3>
+                            <p class="text-xs text-gray-500 mt-2 editable-text" data-edit-id="port-desc-4">동선 레이아웃을 매끄럽게 정리하여 수공예적 공간 완성도를 드높인 인테리어</p>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 5 -->
+                    <div class="portfolio-item group cursor-pointer bg-brand-cream rounded-2xl overflow-hidden shadow-md transition-all hover:shadow-2xl hover:-translate-y-1 transform duration-300" onclick="openLightbox(4)">
+                        <div class="h-64 overflow-hidden relative editable-img-container">
+                            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="수완지구 현진에버빌" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-img-id="port-img-5">
+                            <div class="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white/90 text-brand-primary w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-plus text-lg"></i></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-semibold text-brand-primary uppercase editable-text" data-edit-id="port-cat-5">SUWAN</span>
+                            <h3 class="text-lg font-bold text-brand-dark mt-1 font-serif editable-text" data-edit-id="port-title-5">수완지구 현진에버빌</h3>
+                            <p class="text-xs text-gray-500 mt-2 editable-text" data-edit-id="port-desc-5">도어와 천장의 라인과 면을 일정하게 정돈하여 깔끔하게 마감한 명품 수트 거실</p>
+                        </div>
+                    </div>
+
+                    <!-- Portfolio Item 6 -->
+                    <div class="portfolio-item group cursor-pointer bg-brand-cream rounded-2xl overflow-hidden shadow-md transition-all hover:shadow-2xl hover:-translate-y-1 transform duration-300" onclick="openLightbox(5)">
+                        <div class="h-64 overflow-hidden relative editable-img-container">
+                            <img src="https://images.unsplash.com/photo-1617806118233-18e1db207f62?auto=format&amp;fit=crop&amp;w=800&amp;q=80" alt="치평동 금호쌍용" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" data-img-id="port-img-6">
+                            <div class="absolute inset-0 bg-brand-dark/20 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+                                <span class="bg-white/90 text-brand-primary w-12 h-12 rounded-full flex items-center justify-center shadow-lg"><i class="fa-solid fa-plus text-lg"></i></span>
+                            </div>
+                        </div>
+                        <div class="p-6">
+                            <span class="text-xs font-semibold text-brand-primary uppercase editable-text" data-edit-id="port-cat-6">CHIPYEONG</span>
+                            <h3 class="text-lg font-bold text-brand-dark mt-1 font-serif editable-text" data-edit-id="port-title-6">치평동 금호쌍용</h3>
+                            <p class="text-xs text-gray-500 mt-2 editable-text" data-edit-id="port-desc-6">감각적인 미니멀 조명 구성과 아늑한 공간감을 선사하는 다이닝 다기능 공간</p>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section><section id="sec-contact" data-section-id="sec-contact" class="draggable-section py-20 bg-brand-cream relative">
+            <div class="section-drag-handle absolute top-2 left-1/2 transform -translate-x-1/2 bg-brand-gold text-brand-deep font-bold text-xs px-4 py-1.5 rounded-full shadow-lg items-center space-x-1 z-40 cursor-grab active:cursor-grabbing">
+                <i class="fa-solid fa-grip-vertical"></i>
+                <span>정렬 이동 영역</span>
+            </div>
+
+            <div class="max-w-5xl mx-auto px-5">
+                <div class="bg-white rounded-3xl shadow-xl overflow-hidden grid grid-cols-1 md:grid-cols-12 border border-purple-100">
+                    
+                    <!-- Form Side -->
+                    <div class="p-8 sm:p-12 md:col-span-7 space-y-6">
+                        <div>
+                            <span class="text-brand-primary text-xs font-bold tracking-widest uppercase editable-text" data-edit-id="contact-badge">Start Your Space Plan</span>
+                            <h2 class="font-serif text-2xl sm:text-3xl text-brand-dark font-medium mt-1 editable-text" data-edit-id="contact-title">디자이너와 첫 걸음 떼기</h2>
+                            <p class="text-gray-500 text-xs sm:text-sm mt-1 editable-text" data-edit-id="contact-desc">남겨주신 요구사항을 기반으로 대표 디렉터가 직접 실시간 확인 후 상담 전화를 올립니다.</p>
+                        </div>
+
+                        <!-- Inquiry Form -->
+                        <form onsubmit="handleInquiry(event)" class="space-y-4">
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">성함 *</label>
+                                    <input type="text" id="client-name" required="" class="w-full bg-brand-cream border border-purple-100 focus:border-brand-primary rounded-lg p-3 text-xs outline-none text-brand-dark font-medium">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-gray-600 mb-1">연락처 *</label>
+                                    <input type="tel" id="client-tel" required="" class="w-full bg-brand-cream border border-purple-100 focus:border-brand-primary rounded-lg p-3 text-xs outline-none text-brand-dark font-medium" placeholder="010-0000-0000">
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">시공 평형대 (예: 34평, 50평)</label>
+                                <input type="text" id="client-size" class="w-full bg-brand-cream border border-purple-100 focus:border-brand-primary rounded-lg p-3 text-xs outline-none text-brand-dark font-medium">
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">희망 예산 범위</label>
+                                <select id="client-budget" class="w-full bg-brand-cream border border-purple-100 focus:border-brand-primary rounded-lg p-3 text-xs outline-none text-gray-600 font-medium">
+                                    <option>3,000만 원 ~ 5,000만 원</option>
+                                    <option>5,000만 원 ~ 8,000만 원</option>
+                                    <option>8,000만 원 ~ 1억 2,000만 원</option>
+                                    <option>1억 2,000만 원 이상 (전체 하이엔드 디렉션)</option>
+                                </select>
+                            </div>
+
+                            <div>
+                                <label class="block text-xs font-semibold text-gray-600 mb-1">메모 및 원하시는 스타일 설명</label>
+                                <textarea id="client-memo" rows="3" class="w-full bg-brand-cream border border-purple-100 focus:border-brand-primary rounded-lg p-3 text-xs outline-none text-brand-dark font-medium" placeholder="예: '블로그에서 본 아메시스트 마블 아일랜드 주방 디자인이 인상적이었어요.'"></textarea>
+                            </div>
+
+                            <button type="submit" class="w-full bg-brand-primary hover:bg-brand-dark text-white font-bold text-xs py-4 rounded-lg shadow-md transition-all duration-300 transform hover:-translate-y-0.5">
+                                인테리어 디자인 상담 신청
+                            </button>
+                        </form>
+                    </div>
+
+                    <!-- Direct Contact & Info Side -->
+                    <div class="bg-brand-dark p-8 sm:p-12 md:col-span-5 text-white flex flex-col justify-between space-y-8 relative">
+                        <div class="absolute inset-0 bg-[radial-gradient(ellipse_at_bottom_right,_var(--tw-gradient-stops))] from-brand-primary/40 via-brand-deep/10 to-transparent pointer-events-none"></div>
+                        
+                        <div class="space-y-6 relative z-10">
+                            <span class="text-brand-gold text-xs font-bold tracking-widest uppercase block editable-text" data-edit-id="info-badge">Dorothy Atelier</span>
+                            <h3 class="font-serif text-xl sm:text-2xl font-semibold leading-snug editable-text" data-edit-id="info-title">당신의 특별한 공간 시그니처, 디자인바이도로시</h3>
+                            
+                            <div class="space-y-4 pt-4 text-xs sm:text-sm text-gray-300">
+                                <div class="flex items-start space-x-3">
+                                    <i class="fa-solid fa-map-location-dot text-brand-gold mt-1"></i>
+                                    <span class="editable-text" data-edit-id="info-addr">광주광역시 광산구 장덕동 1075번지 1층</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <i class="fa-solid fa-user-tie text-brand-gold mt-1"></i>
+                                    <span>대표 디렉터 : <span class="editable-text inline-block" data-edit-id="info-rep">김용희</span></span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <i class="fa-solid fa-phone-volume text-brand-gold mt-1"></i>
+                                    <span class="editable-text" data-edit-id="info-tel">010-7752-1053</span>
+                                </div>
+                                <div class="flex items-start space-x-3">
+                                    <i class="fa-solid fa-clock text-brand-gold mt-1"></i>
+                                    <span class="editable-text" data-edit-id="info-time">평일 10:00 - 18:30 (수완 갤러리 예약 상담제 운영)</span>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Beautiful Blog & Social Quick Entrance -->
+                        <div class="pt-6 border-t border-brand-accent/30 space-y-4 relative z-10">
+                            <p class="text-xs text-brand-accent font-bold tracking-widest uppercase editable-text" data-edit-id="info-social">실시간 아틀리에 소식</p>
+                            <div class="grid grid-cols-2 gap-3">
+                                <a href="https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&amp;tab=1" target="_blank" class="bg-white/10 hover:bg-white/20 p-3 rounded-xl flex items-center justify-center space-x-2 text-xs transition-colors">
+                                    <i class="fa-solid fa-blog text-brand-gold"></i>
+                                    <span>공식 블로그</span>
+                                </a>
+                                <a href="https://www.instagram.com/d_by_dorothy/" target="_blank" class="bg-white/10 hover:bg-white/20 p-3 rounded-xl flex items-center justify-center space-x-2 text-xs transition-colors">
+                                    <i class="fa-brands fa-instagram text-brand-gold"></i>
+                                    <span>인스타그램</span>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </section></main>
+
+    <!-- Footer -->
+    <footer class="bg-brand-deep text-gray-400 py-12 border-t border-purple-950">
+        <div class="max-w-7xl mx-auto px-5 grid grid-cols-1 md:grid-cols-4 gap-8">
+            <div class="md:col-span-2 space-y-4">
+                <span class="font-serif text-2xl font-bold text-white tracking-wide">
+                    Design <span class="text-brand-accent">by Dorothy</span>
+                </span>
+                <p class="text-xs text-gray-400 leading-relaxed max-w-sm editable-text" data-edit-id="footer-about">
+                    디자인바이도로시는 엄선된 수공예적 디자인 공정 아래 프리미엄 수완지구, 장덕동, 광주 전역의 럭셔리 다이닝, 마스터 베드룸 및 거실 공간을 아름다운 예술적 가치로 완성합니다.
+                </p>
+                <div class="flex space-x-3 pt-2">
+                    <a href="https://www.instagram.com/d_by_dorothy/" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-primary text-white flex items-center justify-center transition-colors">
+                        <i class="fa-brands fa-instagram text-xs"></i>
+                    </a>
+                    <a href="https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&amp;tab=1" class="w-8 h-8 rounded-full bg-white/5 hover:bg-brand-primary text-white flex items-center justify-center transition-colors">
+                        <i class="fa-solid fa-blog text-xs"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Aesthetic Rooms</h4>
+                <ul class="text-xs space-y-2.5">
+                    <li><a href="#sec-portfolio" class="hover:text-brand-accent transition-colors">Amethyst Living Suite</a></li>
+                    <li><a href="#sec-portfolio" class="hover:text-brand-accent transition-colors">Velvet Master Bedroom</a></li>
+                    <li><a href="#sec-portfolio" class="hover:text-brand-accent transition-colors">Premium Luxury Kitchen</a></li>
+                    <li><a href="#sec-portfolio" class="hover:text-brand-accent transition-colors">Imperial Gold Bath Suite</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white text-xs font-bold uppercase tracking-widest mb-4">Customer Care</h4>
+                <ul class="text-xs space-y-2.5">
+                    <li><a href="#sec-contact" class="hover:text-brand-accent transition-colors">1:1 맞춤 예약 문의</a></li>
+                    <li><a href="#sec-about" class="hover:text-brand-accent transition-colors">프리미엄 인테리어 철학</a></li>
+                    <li><a href="https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&amp;tab=1" class="hover:text-brand-accent transition-colors">네이버 블로그 가이드</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-5 mt-12 pt-6 border-t border-white/5 text-center text-[10px] text-gray-600 flex flex-col sm:flex-row justify-between items-center space-y-4 sm:space-y-0">
+            <p>© 2026 Design by Dorothy Studio. 대표: 김용희 | 광주광역시 광산구 장덕동 1075번지 1층 | 연락처: 010-7752-1053</p>
+            <div class="flex space-x-4">
+                <a href="#" class="hover:text-white transition-colors">이용약관</a>
+                <a href="#" class="hover:text-white transition-colors">개인정보처리방침</a>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Floating Action Buttons (FAB) for Instant Inquiries -->
+    <div class="fixed bottom-6 right-6 z-40 flex flex-col space-y-3">
+        <!-- Naver Blog Floating Button -->
+        <a href="https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&amp;tab=1" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-[#2DB400] text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110" title="블로그에서 더보기">
+            <i class="fa-solid fa-blog text-lg"></i>
+        </a>
+        <!-- Insta Floating Button -->
+        <a href="https://www.instagram.com/d_by_dorothy/" target="_blank" rel="noopener noreferrer" class="w-12 h-12 bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300 hover:scale-110" title="인스타그램 보기">
+            <i class="fa-brands fa-instagram text-lg"></i>
+        </a>
+        <!-- Admin Activator Lock (Tiny & translucent) -->
+        <button onclick="toggleAdminLoginModal()" class="w-12 h-12 bg-brand-deep/20 hover:bg-brand-deep border border-white/10 text-white/50 hover:text-white rounded-full shadow-2xl flex items-center justify-center transition-all duration-300" title="관리자 공간">
+            <i class="fa-solid fa-lock text-xs"></i>
+        </button>
+    </div>
+
+    <!-- Admin Login Modal (Hints and actual username/password removed from label/placeholder) -->
+    <div id="admin-login-modal" class="fixed inset-0 z-[150] bg-brand-deep/80 backdrop-blur-sm items-center justify-center p-4 hidden">
+        <div class="bg-brand-cream border border-purple-100 max-w-sm w-full rounded-3xl p-8 shadow-2xl relative text-brand-darkGray">
+            <button onclick="toggleAdminLoginModal()" class="absolute top-4 right-4 text-gray-400 hover:text-brand-primary">
+                <i class="fa-solid fa-xmark text-xl"></i>
+            </button>
+            <div class="text-center mb-6">
+                <div class="w-12 h-12 bg-brand-lightGray text-brand-primary rounded-full flex items-center justify-center mx-auto mb-3">
+                    <i class="fa-solid fa-shield-halved text-lg"></i>
+                </div>
+                <h3 class="font-serif text-xl font-bold">도로시 아틀리에 관리자</h3>
+                <p class="text-xs text-gray-500 mt-1">수정 권한 확인을 위해 로그인해 주세요</p>
+            </div>
+            <form onsubmit="tryAdminLogin(event)" class="space-y-4">
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Username</label>
+                    <input type="text" id="admin-username" required="" class="w-full bg-white border border-purple-100 rounded-xl p-3 text-xs outline-none focus:border-brand-primary font-medium" placeholder="아이디 입력">
+                </div>
+                <div>
+                    <label class="block text-[10px] font-bold text-gray-500 uppercase tracking-widest mb-1">Password</label>
+                    <input type="password" id="admin-password" required="" class="w-full bg-white border border-purple-100 rounded-xl p-3 text-xs outline-none focus:border-brand-primary font-medium" placeholder="비밀번호 입력">
+                </div>
+                <button type="submit" class="w-full bg-brand-primary hover:bg-brand-dark text-white font-bold text-xs py-3.5 rounded-xl transition-all shadow-md">
+                    보안 채널 로그인
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Portfolio Lightbox Modal -->
+    <div id="lightbox" class="fixed inset-0 z-50 bg-brand-deep/95 hidden items-center justify-center p-4">
+        <button onclick="closeLightbox()" class="absolute top-6 right-6 text-white text-3xl hover:text-brand-gold focus:outline-none" aria-label="모달 닫기">
+            <i class="fa-solid fa-xmark"></i>
+        </button>
+
+        <div class="max-w-4xl w-full bg-brand-cream rounded-3xl overflow-hidden shadow-2xl grid grid-cols-1 md:grid-cols-12 max-h-[90vh] overflow-y-auto">
+            <!-- Left: Modal Image -->
+            <div class="md:col-span-7 h-[300px] md:h-full relative bg-black">
+                <img id="lightbox-img" src="" alt="공간 돋보기" class="w-full h-full object-cover">
+            </div>
+            
+            <!-- Right: Project Description Details -->
+            <div class="md:col-span-5 p-6 sm:p-8 flex flex-col justify-between bg-white text-brand-darkGray">
+                <div class="space-y-4">
+                    <span id="lightbox-category" class="text-xs font-bold text-brand-primary tracking-widest uppercase">LIVING ROOM</span>
+                    <h3 id="lightbox-title" class="font-serif text-2xl font-semibold text-brand-dark leading-snug">동천동 동천센트럴파크</h3>
+                    <hr class="border-purple-100">
+                    <p id="lightbox-desc" class="text-xs sm:text-sm text-gray-600 leading-relaxed">
+                        공간의 가치를 깊고 단단하게 완성시키는 디자인바이도로시의 시그니처 포트폴리오입니다. 공간과 가구의 선을 일정하게 큐레이션하여 안정적이고 품격 넘치는 시각 효과를 제시합니다.
+                    </p>
+                    
+                    <div class="space-y-2 pt-2 text-xs">
+                        <div class="flex justify-between border-b border-purple-50 pb-1.5">
+                            <span class="text-gray-400">시공 대상</span>
+                            <span class="font-bold text-brand-dark">하이엔드 럭셔리 아파트 주거</span>
+                        </div>
+                        <div class="flex justify-between border-b border-purple-50 pb-1.5">
+                            <span class="text-gray-400">주요 톤앤매너</span>
+                            <span class="font-bold text-brand-primary">Amethyst Purple / Warm Cream</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="pt-6 space-y-3">
+                    <a id="lightbox-cta-blog" href="https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&amp;tab=1" target="_blank" class="w-full bg-[#2DB400] text-white text-center py-3.5 rounded-xl text-xs font-bold transition-all hover:opacity-90 flex items-center justify-center space-x-2">
+                        <i class="fa-solid fa-blog"></i>
+                        <span>이 인테리어 상세 시공일지 보기</span>
+                    </a>
+                    <button onclick="closeLightbox()" class="w-full bg-brand-cream hover:bg-brand-lightGray text-brand-dark text-center py-3 rounded-xl text-xs font-bold transition-all">
+                        창 닫기
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Beautiful Styled Toast / Alert Center -->
+    <div id="toast-container" class="fixed top-24 right-6 z-[200] flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- JAVASCRIPT LOGIC -->
+    <script>
+        // 관리자용 계정 설정 (실제 로그인 정보)
+        const ADMIN_ID = "admin";
+        const ADMIN_PW = "1234";
+
+        let originalState = {};
+        let editedDraftState = {};
+
+        // 포트폴리오 데이터 매칭
+        const portfolioData = [
+            {
+                imgId: "port-img-1",
+                category: "DONGCHEON",
+                title: "동천동 동천센트럴파크",
+                desc: "화사하면서 차분함을 느낄 수 있게 정밀 매칭한 시그니처 갤러리 리빙 무드입니다. 벽면 조도와 보라빛 패브릭 가구를 조합하여 단정하면서도 예술적인 거실 무드를 구현했습니다."
+            },
+            {
+                imgId: "port-img-2",
+                category: "SUWAN",
+                title: "수완지구 대방노블랜드",
+                desc: "은은함과 편안함이 공존할 수 있게 수놓아진 최고급 침실 웰니스 수트룸입니다. 눈부심을 최소화한 간접 디밍 시스템과 침대 헤드보드의 깊이감 있는 쿠셔닝이 조화를 이룹니다."
+            },
+            {
+                imgId: "port-img-3",
+                category: "BONGSEON",
+                title: "봉선동 한국아델리움",
+                desc: "대면형 아일랜드와 수납공간을 넉넉하게 매립 시공한 주방 리모델링입니다. 세련된 상판 마블 대리석과 메탈 하드웨어를 활용해 하이엔드 다이닝 동선을 완성했습니다."
+            },
+            {
+                imgId: "port-img-4",
+                category: "JANGDEOK",
+                title: "장덕동 호반베르디움",
+                desc: "동선 레이아웃을 매끄럽게 정리하여 수공예적 공간 완성도를 드높인 인테리어입니다. 절제된 라인 정리를 통해 공간감을 한층 넓어 보이게 디렉팅했습니다."
+            },
+            {
+                imgId: "port-img-5",
+                category: "SUWAN",
+                title: "수완지구 현진에버빌",
+                desc: "도어와 천장의 라인과 면을 일정하게 정돈하여 깔끔하게 마감한 명품 수트 거실입니다. 미니멀리즘의 정수를 보여주는 공간 연출이 특징입니다."
+            },
+            {
+                imgId: "port-img-6",
+                category: "CHIPYEONG",
+                title: "치평동 금호쌍용",
+                desc: "감각적인 미니멀 조명 구성과 아늑한 공간감을 선사하는 다이닝 다기능 공간입니다. 가족들이 한자리에 모여 일상 예술을 감상하는 중심지로 연출했습니다."
+            }
+        ];
+
+        // Custom Toast Alert System
+        function showToast(message, type = "success") {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `flex items-center space-x-3 px-5 py-3.5 rounded-2xl shadow-2xl border text-xs font-semibold transform translate-y-2 opacity-0 transition-all duration-300 ${
+                type === 'success' 
+                ? 'bg-brand-dark text-white border-brand-accent/30' 
+                : 'bg-red-900/90 text-red-100 border-red-700/30'
+            }`;
+            
+            toast.innerHTML = `
+                <i class="fa-solid ${type === 'success' ? 'fa-circle-check text-brand-gold' : 'fa-triangle-exclamation text-red-400'} text-sm"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 50);
+
+            setTimeout(() => {
+                toast.classList.add('translate-y-2', 'opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 5000);
+        }
+
+        // Mobile Menu
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        document.querySelectorAll('#mobile-menu a').forEach(link => {
+            link.addEventListener('click', () => {
+                mobileMenu.classList.add('hidden');
+            });
+        });
+
+        // 3D Carousel system setup
+        const cylinder = document.getElementById('cylinder');
+        const slides = document.querySelectorAll('.slide-3d');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const indicator = document.querySelector('#carousel-indicator span');
+        
+        const slideCount = slides.length;
+        const anglePerSlide = 360 / slideCount; // 60 deg
+        const radius = 290;
+        let currentRotation = 0;
+        let activeIndex = 0;
+
+        function layoutCarousel() {
+            slides.forEach((slide, i) => {
+                const angle = i * anglePerSlide;
+                slide.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
+            });
+            updateActiveState();
+        }
+
+        function rotateCylinder(dir) {
+            currentRotation += dir * anglePerSlide;
+            cylinder.style.transform = `rotateY(${currentRotation}deg)`;
+            activeIndex = (activeIndex - dir + slideCount) % slideCount;
+            indicator.textContent = activeIndex + 1;
+            updateActiveState();
+        }
+
+        function updateActiveState() {
+            slides.forEach((slide, i) => {
+                const relativeIndex = (i - activeIndex + slideCount) % slideCount;
+                if (relativeIndex === 0) {
+                    slide.style.opacity = '1';
+                    slide.style.filter = 'none';
+                    slide.style.zIndex = '10';
+                } else if (relativeIndex === 1 || relativeIndex === slideCount - 1) {
+                    slide.style.opacity = '0.65';
+                    slide.style.filter = 'blur(1px) brightness(0.8)';
+                    slide.style.zIndex = '5';
+                } else {
+                    slide.style.opacity = '0.15';
+                    slide.style.filter = 'blur(4px) brightness(0.4)';
+                    slide.style.zIndex = '1';
+                }
+            });
+        }
+
+        prevBtn.addEventListener('click', () => rotateCylinder(1));
+        nextBtn.addEventListener('click', () => rotateCylinder(-1));
+
+        // Drag & Touch support for 3D Carousel
+        let isDragging = false;
+        let startX = 0;
+        let rotationOnStart = 0;
+
+        function startDrag(e) {
+            if (document.body.classList.contains('admin-mode-active')) return;
+            isDragging = true;
+            startX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            rotationOnStart = currentRotation;
+            cylinder.style.transition = 'none';
+        }
+
+        function doDrag(e) {
+            if (!isDragging) return;
+            const currentX = e.type.includes('touch') ? e.touches[0].clientX : e.clientX;
+            const diffX = currentX - startX;
+            const degreeChange = (diffX / window.innerWidth) * 180;
+            cylinder.style.transform = `rotateY(${rotationOnStart + degreeChange}deg)`;
+        }
+
+        function endDrag(e) {
+            if (!isDragging) return;
+            isDragging = false;
+            cylinder.style.transition = 'transform 0.8s cubic-bezier(0.25, 0.8, 0.25, 1)';
+            
+            const currentX = e.type.includes('touch') ? (e.changedTouches[0] ? e.changedTouches[0].clientX : startX) : e.clientX;
+            const diffX = currentX - startX;
+            
+            if (diffX > 50) {
+                rotateCylinder(1);
+            } else if (diffX < -50) {
+                rotateCylinder(-1);
+            } else {
+                cylinder.style.transform = `rotateY(${currentRotation}deg)`;
+            }
+        }
+
+        cylinder.addEventListener('mousedown', startDrag);
+        window.addEventListener('mousemove', doDrag);
+        window.addEventListener('mouseup', endDrag);
+
+        cylinder.addEventListener('touchstart', startDrag, { passive: true });
+        cylinder.addEventListener('touchmove', doDrag, { passive: true });
+        cylinder.addEventListener('touchend', endDrag);
+
+        layoutCarousel();
+
+        // Lightbox Modals
+        const lightbox = document.getElementById('lightbox');
+        const lightboxImg = document.getElementById('lightbox-img');
+        const lightboxTitle = document.getElementById('lightbox-title');
+        const lightboxCategory = document.getElementById('lightbox-category');
+        const lightboxDesc = document.getElementById('lightbox-desc');
+        const ctaBlog = document.getElementById('lightbox-cta-blog');
+
+        function openLightbox(index) {
+            if (document.body.classList.contains('admin-mode-active')) return; // 관리자 모드 중엔 모달 금지
+
+            const data = portfolioData[index];
+            const currentImgElement = document.querySelector(`[data-img-id="${data.imgId}"]`);
+            
+            const titleElement = document.querySelector(`[data-edit-id="port-title-${index + 1}"]`);
+            const descElement = document.querySelector(`[data-edit-id="port-desc-${index + 1}"]`);
+            const catElement = document.querySelector(`[data-edit-id="port-cat-${index + 1}"]`);
+
+            lightboxImg.src = currentImgElement ? currentImgElement.src : '';
+            lightboxTitle.textContent = titleElement ? titleElement.textContent : data.title;
+            lightboxCategory.textContent = catElement ? catElement.textContent : data.category;
+            lightboxDesc.textContent = descElement ? descElement.textContent : data.desc;
+            
+            ctaBlog.href = `https://m.blog.naver.com/PostList.naver?blogId=director_dorothy&tab=1`;
+
+            lightbox.classList.remove('hidden');
+            lightbox.classList.add('flex');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            lightbox.classList.remove('flex');
+            lightbox.classList.add('hidden');
+            document.body.style.overflow = '';
+        }
+
+        lightbox.addEventListener('click', (e) => {
+            if (e.target === lightbox) closeLightbox();
+        });
+
+        // 1:1 Inquiries formulation
+        function handleInquiry(e) {
+            e.preventDefault();
+            
+            const name = document.getElementById('client-name').value;
+            const tel = document.getElementById('client-tel').value;
+            const size = document.getElementById('client-size').value;
+            const budget = document.getElementById('client-budget').value;
+            const memo = document.getElementById('client-memo').value;
+
+            // dbydorothy@naver.com 메일 발송 양식 포맷팅
+            const subject = encodeURIComponent(`[디자인바이도로시 상담] ${name} 고객 시공 신청서`);
+            const body = encodeURIComponent(
+                `디자인바이도로시 대표 수신용\n` +
+                `고객 성함: ${name}\n` +
+                `고객 연락처: ${tel}\n` +
+                `시공 평형대: ${size || '미입력'}\n` +
+                `희망 예산 범위: ${budget}\n` +
+                `요구 메모:\n${memo || '없음'}`
+            );
+
+            showToast("상담 서식이 완성되었습니다. 확인을 클릭하시면 네이버 이메일 발송 창이 실행됩니다.", "success");
+            
+            setTimeout(() => {
+                window.location.href = `mailto:dbydorothy@naver.com?subject=${subject}&body=${body}`;
+            }, 1000);
+
+            e.target.reset();
+        }
+
+        // Admin Core Control
+        const adminBar = document.getElementById('admin-bar');
+        const adminLoginModal = document.getElementById('admin-login-modal');
+        const filePicker = document.getElementById('admin-file-picker');
+        let currentTargetImg = null;
+
+        function toggleAdminLoginModal() {
+            adminLoginModal.classList.toggle('hidden');
+            adminLoginModal.classList.toggle('flex');
+        }
+
+        function tryAdminLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('admin-username').value;
+            const p = document.getElementById('admin-password').value;
+
+            if (u === ADMIN_ID && p === ADMIN_PW) {
+                activateAdminState();
+                toggleAdminLoginModal();
+                showToast("디자이너 관리 전용 툴바가 활성화되었습니다. 내용을 클릭해 수정해 보세요.", "success");
+            } else {
+                showToast("보안 계정 정보가 틀렸습니다.", "error");
+            }
+        }
+
+        function backupOriginalState() {
+            document.querySelectorAll('[data-edit-id]').forEach(el => {
+                originalState[el.getAttribute('data-edit-id')] = el.innerHTML;
+            });
+            document.querySelectorAll('[data-img-id]').forEach(img => {
+                originalState[img.getAttribute('data-img-id')] = img.src;
+            });
+            const currentSections = Array.from(document.getElementById('main-section-container').children);
+            originalState['section-order'] = currentSections.map(sec => sec.id);
+        }
+
+        function activateAdminState() {
+            document.body.classList.add('admin-mode-active');
+            adminBar.classList.remove('hidden', '-translate-y-full');
+            adminBar.classList.add('transform', 'translate-y-0');
+
+            document.querySelectorAll('.editable-text').forEach(el => {
+                el.setAttribute('contenteditable', 'true');
+            });
+
+            // 이미지 클릭 인터셉트 (캡처링 단계 활용)
+            document.querySelectorAll('.editable-img-container img').forEach(img => {
+                img.addEventListener('click', handleImageClickInterception, true);
+            });
+
+            enableSectionDragAndDrop();
+        }
+
+        function handleImageClickInterception(e) {
+            if (!document.body.classList.contains('admin-mode-active')) return;
+            e.stopPropagation();
+            e.preventDefault();
+            currentTargetImg = e.target;
+            filePicker.click();
+        }
+
+        function logoutAdmin() {
+            document.body.classList.remove('admin-mode-active');
+            adminBar.classList.add('-translate-y-full');
+            adminBar.classList.remove('translate-y-0');
+            setTimeout(() => adminBar.classList.add('hidden'), 300);
+
+            document.querySelectorAll('.editable-text').forEach(el => {
+                el.removeAttribute('contenteditable');
+            });
+            
+            document.querySelectorAll('.editable-img-container img').forEach(img => {
+                img.removeEventListener('click', handleImageClickInterception, true);
+            });
+
+            showToast("관리자 권한 수정을 종료합니다.", "success");
+        }
+
+        // Image compression via Canvas (자동 용량 최적화 및 70% 압축 엔진)
+        filePicker.addEventListener('change', function(e) {
+            if (e.target.files && e.target.files[0] && currentTargetImg) {
+                const file = e.target.files[0];
+                const reader = new FileReader();
+                
+                reader.onload = function(evt) {
+                    const tempImg = new Image();
+                    tempImg.onload = function() {
+                        const canvas = document.createElement('canvas');
+                        const MAX_WIDTH = 1200;
+                        const MAX_HEIGHT = 1200;
+                        let width = tempImg.width;
+                        let height = tempImg.height;
+
+                        if (width > height) {
+                            if (width > MAX_WIDTH) {
+                                height *= MAX_WIDTH / width;
+                                width = MAX_WIDTH;
+                            }
+                        } else {
+                            if (height > MAX_HEIGHT) {
+                                width *= MAX_HEIGHT / height;
+                                height = MAX_HEIGHT;
+                            }
+                        }
+
+                        canvas.width = width;
+                        canvas.height = height;
+                        const ctx = canvas.getContext('2d');
+                        ctx.drawImage(tempImg, 0, 0, width, height);
+
+                        // 가볍고 선명한 JPEG 파일로 포맷 축소 변환
+                        const compressedDataUrl = canvas.toDataURL('image/jpeg', 0.75);
+                        currentTargetImg.src = compressedDataUrl;
+                        showToast("이미지 품질 압축 및 교체가 정상 반영되었습니다.", "success");
+                    };
+                    tempImg.src = evt.target.result;
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+
+        // WYSIWYG Formatter
+        function formatText(command, value = null) {
+            document.execCommand(command, false, value);
+        }
+
+        // Section Drag & Drop
+        let dragSrcEl = null;
+
+        function enableSectionDragAndDrop() {
+            const sections = document.querySelectorAll('.draggable-section');
+            const mainContainer = document.getElementById('main-section-container');
+
+            sections.forEach(section => {
+                const dragHandle = section.querySelector('.section-drag-handle');
+                if (!dragHandle) return;
+
+                dragHandle.onmousedown = () => section.setAttribute('draggable', 'true');
+                dragHandle.onmouseup = () => section.removeAttribute('draggable');
+
+                section.addEventListener('dragstart', function(e) {
+                    dragSrcEl = this;
+                    e.dataTransfer.effectAllowed = 'move';
+                    this.style.opacity = '0.4';
+                });
+
+                section.addEventListener('dragover', function(e) {
+                    if (e.preventDefault) e.preventDefault();
+                    return false;
+                });
+
+                section.addEventListener('dragenter', function() {
+                    this.classList.add('drag-over');
+                });
+
+                section.addEventListener('dragleave', function() {
+                    this.classList.remove('drag-over');
+                });
+
+                section.addEventListener('drop', function(e) {
+                    if (e.stopPropagation) e.stopPropagation();
+                    
+                    if (dragSrcEl !== this) {
+                        this.classList.remove('drag-over');
+                        const children = Array.from(mainContainer.children);
+                        const dragIdx = children.indexOf(dragSrcEl);
+                        const dropIdx = children.indexOf(this);
+
+                        if (dragIdx < dropIdx) {
+                            mainContainer.insertBefore(dragSrcEl, this.nextSibling);
+                        } else {
+                            mainContainer.insertBefore(dragSrcEl, this);
+                        }
+                    }
+                    return false;
+                });
+
+                section.addEventListener('dragend', function() {
+                    this.style.opacity = '1';
+                    section.removeAttribute('draggable');
+                    sections.forEach(sec => sec.classList.remove('drag-over'));
+                });
+            });
+        }
+
+        // 브라우저 캐시(임시 저장)에만 저장하기
+        function saveAdminChangesToCache() {
+            const savedState = {
+                texts: {},
+                images: {},
+                sectionOrder: []
+            };
+
+            document.querySelectorAll('[data-edit-id]').forEach(el => {
+                savedState.texts[el.getAttribute('data-edit-id')] = el.innerHTML;
+            });
+
+            document.querySelectorAll('[data-img-id]').forEach(img => {
+                savedState.images[img.getAttribute('data-img-id')] = img.src;
+            });
+
+            document.querySelectorAll('#main-section-container > section').forEach(sec => {
+                savedState.sectionOrder.push(sec.id);
+            });
+
+            localStorage.setItem('dorothy_admin_state', JSON.stringify(savedState));
+            showToast("현재 기기에 변경사항 임시 저장이 정상 완료되었습니다.", "success");
+        }
+
+        // ★★★ 배포용 파일 굽기 다운로드 엔진 (Baking HTML) ★★★
+        function downloadBakedHTML() {
+            // 원본에서 가공할 복제본 생성
+            const docClone = document.documentElement.cloneNode(true);
+
+            // 1. 배포 후 방문자가 최초 로드 시 편집모드가 아닌 '일반 방문 무드'로 로드되도록 제어
+            const bodyClone = docClone.querySelector('body');
+            if (bodyClone) {
+                bodyClone.classList.remove('admin-mode-active');
+            }
+            
+            const barClone = docClone.querySelector('#admin-bar');
+            if (barClone) {
+                barClone.classList.add('hidden', '-translate-y-full');
+                barClone.classList.remove('transform', 'translate-y-0');
+            }
+            
+            const loginModalClone = docClone.querySelector('#admin-login-modal');
+            if (loginModalClone) {
+                loginModalClone.classList.add('hidden');
+                loginModalClone.classList.remove('flex');
+            }
+
+            // 2. 관리자 텍스트 수정을 위해 임시로 활성화된 Attributes 요소들 클린 처리
+            docClone.querySelectorAll('.editable-text').forEach(el => {
+                el.removeAttribute('contenteditable');
+            });
+
+            // 3. 수정한 글귀와 사진 소스를 복제본 HTML 구조 내부에 주입(Baking)
+            document.querySelectorAll('[data-edit-id]').forEach(el => {
+                const id = el.getAttribute('data-edit-id');
+                const cloneEl = docClone.querySelector(`[data-edit-id="${id}"]`);
+                if (cloneEl) cloneEl.innerHTML = el.innerHTML;
+            });
+
+            document.querySelectorAll('[data-img-id]').forEach(img => {
+                const id = img.getAttribute('data-img-id');
+                const cloneImg = docClone.querySelector(`[data-img-id="${id}"]`);
+                if (cloneImg) cloneImg.src = img.src;
+            });
+
+            // 4. [버그 완벽 해결] 빈 객체 충돌을 막기 위해 컨테이너 청소 전 섹션 요소를 맵 형태로 수집하여 조립
+            const mainContainer = document.getElementById('main-section-container');
+            const cloneContainer = docClone.querySelector('#main-section-container');
+            if (mainContainer && cloneContainer) {
+                const clonedSections = [];
+                Array.from(mainContainer.children).forEach(sec => {
+                    const cloneSec = docClone.querySelector(`#${sec.id}`);
+                    if (cloneSec) {
+                        clonedSections.push(cloneSec);
+                    }
+                });
+                
+                // 캐싱이 끝난 뒤에만 안전하게 컨테이너를 비우고 섹션을 조립합니다.
+                cloneContainer.innerHTML = '';
+                clonedSections.forEach(clonedSec => {
+                    cloneContainer.appendChild(clonedSec);
+                });
+            }
+
+            // 5. 다운로드용 HTML 문자열 생성 및 트리거
+            const bakedHTML = "<!DOCTYPE html>\n" + docClone.outerHTML;
+
+            // 다운로드 실행
+            const blob = new Blob([bakedHTML], { type: "text/html;charset=utf-8;" });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.setAttribute("download", "index.html");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            showToast("수정된 글과 사진이 100% 영구 저장된 새 배포 파일(index.html)이 다운로드되었습니다!", "success");
+        }
+
+        // 초기화 리셋
+        function resetOriginalState() {
+            if (confirm('모든 인테리어 수정 사항을 소거하고 디폴트 초기 시안으로 리셋하시겠습니까?')) {
+                localStorage.removeItem('dorothy_admin_state');
+                showToast("복구 완료. 화면을 리로드합니다.", "success");
+                setTimeout(() => window.location.reload(), 1500);
+            }
+        }
+
+        // 사이트 최초 시동 시 편집 드래프트 로드하기
+        function loadSavedChanges() {
+            // 일반 방문자일 때는 임시 저장 데이터를 강제로 로드하지 않습니다.
+            // (내 컴퓨터 임시 데이터가 깃허브 배포된 실제 수정 파일을 덮어쓰지 않게끔 하는 가장 핵심 안전장치)
+            if (document.body.classList.contains('admin-mode-active')) {
+                const localData = localStorage.getItem('dorothy_admin_state');
+                if (!localData) return;
+
+                try {
+                    const data = JSON.parse(localData);
+                    const mainContainer = document.getElementById('main-section-container');
+
+                    if (data.texts) {
+                        for (const [id, value] of Object.entries(data.texts)) {
+                            const target = document.querySelector(`[data-edit-id="${id}"]`);
+                            if (target) target.innerHTML = value;
+                        }
+                    }
+
+                    if (data.images) {
+                        for (const [id, src] of Object.entries(data.images)) {
+                            const target = document.querySelector(`[data-img-id="${id}"]`);
+                            if (target) target.src = src;
+                        }
+                    }
+
+                    if (data.sectionOrder && data.sectionOrder.length > 0 && mainContainer) {
+                        data.sectionOrder.forEach(secId => {
+                            const sec = document.getElementById(secId);
+                            if (sec) mainContainer.appendChild(sec);
+                        });
+                    }
+                } catch (err) {
+                    console.error("Failed to load layout configs.", err);
+                }
+            }
+        }
+
+        window.onload = function() {
+            backupOriginalState();
+            // 관리자 모드 활성화 상태에서만 로컬 드래프트 로드 허가
+            loadSavedChanges();
+        };
+    </script>
+
+</body></html>
